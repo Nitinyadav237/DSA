@@ -1,0 +1,56 @@
+class queueForstack<T>{
+    private items: T[] = []
+    
+    isEmpty(): boolean{
+        return this.items.length===0
+    }
+
+    enqueue(item: T): void{
+        this.items.push(item)
+    }
+    dequeue(): T | undefined{
+        if (this.isEmpty()) return undefined
+        return this.items.shift()
+    }
+    peek(): T | undefined{
+        return this.items[0]
+    }
+}
+
+class Stackusing2Queue<T>{
+    private queue1 = new queueForstack<T>();
+    private queue2 = new queueForstack<T>();
+
+    push(item: T): void{
+        this.queue2.enqueue(item)
+        while (!this.queue1.isEmpty()) {
+            this.queue2.enqueue(this.queue1.dequeue()!)
+        }
+        //swap queueu to make q1 asn primary
+        const temp = this.queue1;
+        this.queue1 = this.queue2
+        this.queue2=temp
+    }
+    pop(): T | undefined{
+        return this.queue1.dequeue()
+    }
+    peek(): T | undefined{
+        return this.queue1.peek()
+    }
+    isEmpty(): boolean{
+        return this.queue1.isEmpty()
+    }
+
+}
+
+const stack = new Stackusing2Queue<number>();
+stack.push(10);
+stack.push(20);
+stack.push(30);
+stack.push(40);
+
+console.log(stack.peek()); // Should print 40
+console.log(stack.pop());  // Should print 40
+console.log(stack.peek()); // Should print 30
+
+console.log(stack.isEmpty());
